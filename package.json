@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/MinaBavosi/p5-node-lesson#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "socket.io": "^4.4.0"
   }
 }
