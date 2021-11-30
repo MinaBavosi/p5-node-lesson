@@ -47,7 +47,7 @@ function draw() {
   fill(myColor);
   textSize(60);
   textAlign(CENTER);
-  text("LEAVE A MESSAGE FOR YOUR CRUSH", width / 2, height / 8);
+  text("LEAVE A MESSAGE FOR YOUR CRUSH", width / 2, height / 12);
   pop();
 }
 
