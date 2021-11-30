@@ -10,14 +10,14 @@ function setColor(assignedColor) {
 }
 
 function newConnection() {
-  console.log(clientSocket.id);
+  console.log("your id:" + clientSocket.id);
 }
 
 function drawOtherMouse(data) {
   push();
   stroke(data.color);
   strokeWeight(3);
-  line(data.x, data.y, data.x2, data.y2);
+  line(data.x, data.y);
   pop();
 }
 
@@ -27,11 +27,11 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background("white");
+  background("black");
 
   push();
   textSize(30);
-  fill("balck");
+  fill("black");
   textAlign(CENTER, CENTER);
 
   imageMode(CENTER);
@@ -61,8 +61,6 @@ function mouseDragged() {
   let message = {
     x: mouseX,
     y: mouseY,
-    x2: pmouseX,
-    y2: pmouseY,
     color: myColor,
   };
   clientSocket.emit("mouse", message);
