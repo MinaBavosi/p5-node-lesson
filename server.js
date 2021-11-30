@@ -1,6 +1,7 @@
 console.log("up and running");
 
 let express = require("express");
+let serverSocket = require("socket.io");
 
 let app = express();
 
@@ -12,8 +13,6 @@ console.log("Server is running on http://localhost:" + port);
 
 app.use(express.static("public"));
 
-let serverSocket = require("socket.io");
-
 let io = serverSocket(server);
 
 io.on("connection", newConnection);
@@ -23,10 +22,9 @@ function newConnection(newSocket) {
   newSocket.on("mouse", mouseMessage);
 
   let clientColor = getRandomColor();
-  socket.emit("color", clientColor);
-
-  let clientIndex = getRandomIndex();
-  socket.emit("index", clientIndex);
+  serverSocket.emit("color", clientColor);
+  serverSocket.broadcast.emit("newPlayer", clientColor);
+  serverSocket.on("mouse", mouseMessage);
 
   function mouseMessage(dataReceived) {
     console.log(dataReceived);
@@ -37,23 +35,9 @@ function newConnection(newSocket) {
 
 function getRandomColor() {
   var letters = "0123456789ABCDEF";
-  var greys = [
-    "#303030",
-    "#505050",
-    "#696969",
-    "#808080",
-    "#989898",
-    "#A9A9A9",
-    "#C0C0C0",
-    "#D3D3D3",
-    "#F5F5F5",
-  ];
-  var color = greys[Math.floor(Math.random() * 9)];
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
   return color;
-}
-
-function getRandomIndex() {
-  var index = Math.floor(Math.random() * 6);
-  console.log(index);
-  return index;
 }

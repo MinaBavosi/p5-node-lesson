@@ -1,64 +1,69 @@
 let clientSocket = io();
-let myColor = "black";
-let background = [];
+let myColor = "white";
 
 clientSocket.on("connect", newConnection);
-clientSocket.on("mouseBroadcast", newBroadcast);
+clientSocket.on("mouseBroadcast", drawOtherMouse);
 clientSocket.on("color", setColor);
-clientSocket.on("index", setIndex);
 
 function setColor(assignedColor) {
   myColor = assignedColor;
-}
-
-function setIndex(assignedIndex) {
-  myIndex = assignedIndex;
 }
 
 function newConnection() {
   console.log(clientSocket.id);
 }
 
-function newBroadcast(data) {
-  console.log(data);
-  fill("red");
-  circle(data.x, data.y, 10);
-}
-
 function drawOtherMouse(data) {
   push();
-  noStroke();
-  fill(255, 255, 255, 63);
-  ellipse(data.x, data.y, 20);
+  stroke(data.color);
+  strokeWeight(3);
+  line(data.x, data.y, data.x2, data.y2);
   pop();
 }
 
 function preload() {
-  img = loadImage("bagni.jpg");
-  background.push(img);
+  myImage = loadImage("./assets/bagni.jpg");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(background[myIndex]);
-  console.log(myIndex);
+  background("white");
+
+  push();
   textSize(30);
+  fill("balck");
   textAlign(CENTER, CENTER);
-  text("a message for your crush", windowWidth / 2, windowHeight / 2);
+
+  imageMode(CENTER);
+  push();
+  image(myImage, width / 2, height / 2, windowWidth, windowHeight);
+  pop();
 }
 
-function draw() {}
-
-function mouseMoved() {
+function draw() {
   push();
   noStroke();
+
   fill(myColor);
-  tint(255, 126);
-  ellipse(mouseX, mouseY, 20);
+  textSize(66);
+  textAlign(CENTER);
+  text("a message for your crush", width / 2, height / 8);
   pop();
+}
+
+function mouseDragged() {
+  push();
+  stroke(myColor);
+  strokeWeight(3);
+  line(pmouseX, pmouseY, mouseX, mouseY);
+  pop();
+  //create the message
   let message = {
     x: mouseX,
     y: mouseY,
+    x2: pmouseX,
+    y2: pmouseY,
+    color: myColor,
   };
   clientSocket.emit("mouse", message);
 }
