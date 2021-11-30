@@ -1,23 +1,23 @@
-let clientSocket = io();
+let socket = io();
 let myColor = "white";
 
-clientSocket.on("connect", newConnection);
-clientSocket.on("mouseBroadcast", drawOtherMouse);
-clientSocket.on("color", setColor);
+socket.on("connect", newConnection);
+socket.on("mouseBroadcast", drawOtherMouse);
+socket.on("color", setColor);
 
 function setColor(assignedColor) {
   myColor = assignedColor;
 }
 
 function newConnection() {
-  console.log("your id:" + clientSocket.id);
+  console.log("your id:" + socket.id);
 }
 
 function drawOtherMouse(data) {
   push();
   stroke(data.color);
   strokeWeight(3);
-  line(data.x, data.y);
+  line(data.x, data.y, data.x2, data.y2);
   pop();
 }
 
@@ -61,7 +61,9 @@ function mouseDragged() {
   let message = {
     x: mouseX,
     y: mouseY,
+    x2: pmouseX,
+    y2: pmouseY,
     color: myColor,
   };
-  clientSocket.emit("mouse", message);
+  socket.emit("mouse", message);
 }

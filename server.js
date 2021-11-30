@@ -1,7 +1,8 @@
 console.log("up and running");
 
 let express = require("express");
-let serverSocket = require("socket.io");
+
+let socket = require("socket.io");
 
 let app = express();
 
@@ -11,23 +12,21 @@ let server = app.listen(port);
 
 app.use(express.static("public"));
 
-let io = serverSocket(server);
+let io = socket(server);
 
 io.on("connection", newConnection);
 
-function newConnection(newSocket) {
-  console.log("new connection: " + newSocket.id);
-  newSocket.on("mouse", mouseMessage);
-
+function newConnection(socket) {
+  console.log("new connection: " + socket.client.id);
   let clientColor = getRandomColor();
-  serverSocket.emit("color", clientColor);
-  serverSocket.broadcast.emit("newPlayer", clientColor);
-  serverSocket.on("mouse", mouseMessage);
+  socket.emit("color", clientColor);
+  socket.broadcast.emit("newPlayer", clientColor);
+  socket.on("mouse", mouseMessage);
 
   function mouseMessage(dataReceived) {
-    console.log(dataReceived);
+    console.log(socket.client.id, dataReceived);
 
-    newSocket.broadcast.emit("mouseBroadcast", dataReceived);
+    socket.broadcast.emit("mouseBroadcast", dataReceived);
   }
 }
 
