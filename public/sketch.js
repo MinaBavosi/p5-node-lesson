@@ -45,9 +45,9 @@ function draw() {
   noStroke();
 
   fill(myColor);
-  textSize(66);
+  textSize(60);
   textAlign(CENTER);
-  text("a message for your crush", width / 2, height / 8);
+  text("LEAVE A MESSAGE FOR YOUR CRUSH", width / 2, height / 4);
   pop();
 }
 
